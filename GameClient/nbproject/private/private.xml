@@ -3,12 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/nguye/OneDrive/Documents/NetBeansProjects/Desktop/GameClient/src/gameclient/ReceivingThread.java</file>
-            <file>file:/C:/Users/nguye/OneDrive/Documents/NetBeansProjects/Desktop/GameClient/src/gameclient/GameClient.java</file>
-            <file>file:/C:/Users/nguye/OneDrive/Documents/NetBeansProjects/Desktop/GameClient/src/view/GUI_Login.java</file>
-            <file>file:/C:/Users/nguye/OneDrive/Documents/NetBeansProjects/Desktop/GameClient/src/view/GUI_Game.java</file>
-            <file>file:/C:/Users/nguye/OneDrive/Documents/NetBeansProjects/Desktop/GameClient/src/view/GUI_Signup.java</file>
-            <file>file:/C:/Users/nguye/OneDrive/Documents/NetBeansProjects/Desktop/GameClient/src/view/GUI_Home.java</file>
+            <file>file:/C:/Users/nguye/OneDrive/Documents/NetBeansProjects/GameDoiKhangSocket/GameClient/src/gameclient/GameClient.java</file>
+            <file>file:/C:/Users/nguye/OneDrive/Documents/NetBeansProjects/GameDoiKhangSocket/GameClient/src/view/GUI_Home.java</file>
+            <file>file:/C:/Users/nguye/OneDrive/Documents/NetBeansProjects/GameDoiKhangSocket/GameClient/src/gameclient/ReceivingThread.java</file>
+            <file>file:/C:/Users/nguye/OneDrive/Documents/NetBeansProjects/GameDoiKhangSocket/GameClient/src/view/ItemModel.java</file>
         </group>
     </open-files>
 </project-private>

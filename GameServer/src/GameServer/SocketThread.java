@@ -25,18 +25,16 @@ public class SocketThread extends Request implements Runnable, Serializable {
     Player player;
     GameServer game_server;
     ObjectInputStream ois;
-    ObjectOutputStream oos;
     Boolean is_running = true;
 
     public SocketThread(GameServer game_server, Socket socket) {
         try {
             this.player = new Player(socket);
+            this.player.oos = new ObjectOutputStream(socket.getOutputStream());
             this.game_server = game_server;
             this.game_server.gui_server.appendMessage("[Player]: Connected at port " + socket.getPort());
-            oos = new ObjectOutputStream(this.player.socket.getOutputStream());
         } catch (IOException ex) {
             this.game_server.gui_server.appendMessage("[SocketThreadExeption]: " + ex.getMessage());
-            Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -46,33 +44,41 @@ public class SocketThread extends Request implements Runnable, Serializable {
         try {
             while (is_running) {
                 ois = new ObjectInputStream(this.player.socket.getInputStream());
-//                read message
+                //read message
                 msg = (Message) ois.readObject();
-                System.out.println(msg.getAction());
                 switch (msg.getAction()) {
                     case "login":
                         this.login(msg);
+                        this.sendOnlineList(this.player.oos, this.game_server.onlineList);
                         break;
                     case "signup":
-
                         break;
                     case "logout":
 
                         break;
+                    case "loadOnline": 
+                        this.sendOnlineList(this.player.oos, this.game_server.onlineList);
+                        break;
+                    case "challenge":
+                        this.challenge(this.game_server.onlinePlayer, msg.getUser(), this.player.user);
+                        break;
+                    case "repChallenge": 
+                        this.repChallenge(this.game_server.onlinePlayer, msg);
+                        break;
                     default:
-                        System.out.println("Khong ro");
+                        
                         break;
                 }
 
             }
         } catch (IOException ex) {
-//            game_server.gui_server.appendMessage("[Player] " + player.user.getNickname() + ": disconnect!");
-            Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
+            game_server.onlineList.remove(this.player.user);
+            game_server.onlinePlayer.remove(this.player);
+            game_server.gui_server.appendMessage("[Player] " + player.user.getNickname() + ": disconnected!");
+            System.out.println("[Player] " + player.user.getNickname() + ": disconnected!");
 
         } catch (ClassNotFoundException ex) {
             game_server.gui_server.appendMessage("[Server]: unreadable message of " + player.user.getNickname());
-            Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
-
         }
     }
 
@@ -83,18 +89,18 @@ public class SocketThread extends Request implements Runnable, Serializable {
                 this.player.user = user;
                 this.player.status = 1;
                 //add player to the online players list
-                this.game_server.onlineList.add(this.player);
+                this.game_server.onlinePlayer.add(this.player);
+                this.game_server.onlineList.add(this.player.user);
                 //send a message to the requested player
-                oos.writeObject(new Message("login", this.player));
-                oos.flush();
+                this.player.oos.writeObject(new Message("login", this.player.user));
+                this.player.oos.flush();
                 return;
             }
-            oos.writeObject(new Message("login","Username or password are incorrect"));
-            oos.flush();
+            this.player.oos.writeObject(new Message("login", "Username or password are incorrect"));
+            this.player.oos.flush();
             return;
         }
-        oos.writeObject(new Message("login","Player is online"));
-        oos.flush();
+        this.player.oos.writeObject(new Message("login", "Player is online"));
+        this.player.oos.flush();
     }
-
 }

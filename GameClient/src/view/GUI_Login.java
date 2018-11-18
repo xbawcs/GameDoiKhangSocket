@@ -136,7 +136,7 @@ public class GUI_Login extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         if (!this.gameclient.isLogin) {
-            if (!"".equals(this.txtUsername) && !"".equals(this.txtPassword)) {
+            if (!"".equals(this.txtUsername.getText()) && !"".equals(this.txtPassword.getText())) {
                 ObjectOutputStream oos = null;
                 try {
                     String username = this.txtUsername.getText();

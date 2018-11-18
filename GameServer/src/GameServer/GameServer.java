@@ -26,11 +26,13 @@ import view.GUI_Server;
 public class GameServer implements Runnable, Constant {
 
     ServerSocket serverSocket;
-    public static ArrayList<Player> onlineList = new ArrayList<>();
+    public static ArrayList<User> onlineList = new ArrayList<>();
+    public static ArrayList<Player> onlinePlayer = new ArrayList<>();
     public static ArrayList<User> allUser = new ArrayList<>();
     public Connection connect = null;
     GUI_Server gui_server;
     boolean keepGoing = true;
+    Thread sendListOnline;
 
     public GameServer(GUI_Server gui_server, int port) {
         //start server
@@ -42,7 +44,6 @@ public class GameServer implements Runnable, Constant {
             gui_server.appendMessage("[Server]: Server started");
         } catch (IOException ex) {
             gui_server.appendMessage("[Server]: Server can't start");
-            Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
         }
         //check connect to mysql
         checkConnectMSQL();
@@ -57,11 +58,9 @@ public class GameServer implements Runnable, Constant {
             } catch (SQLException ex) {
                 System.out.println("Can't connect to mysql.");
                 this.gui_server.appendMessage("[Server]: Server can't connect to mysql");
-                Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (ClassNotFoundException ex) {
             System.out.println("Error : " + ex);
-            Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -71,10 +70,9 @@ public class GameServer implements Runnable, Constant {
             try {
                 Socket socket = serverSocket.accept();
                 new Thread(new SocketThread(this, socket)).start();
-                
+
             } catch (IOException ex) {
                 gui_server.appendMessage("[Server IOExepion]:  " + ex.getMessage());
-                Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -84,7 +82,6 @@ public class GameServer implements Runnable, Constant {
         try {
             serverSocket.close();
             keepGoing = false;
-
             gui_server.appendMessage("[Server]: Server stoped");
             System.out.println("Máy Chủ bị đóng..!");
             System.exit(0);

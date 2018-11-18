@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 
@@ -14,10 +15,10 @@ import java.net.Socket;
  */
 public class Player implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    public transient Socket socket;
+    public Socket socket;
     public User user;
     public int status;
+    public ObjectOutputStream oos;
 
     public Player(Socket socket, User user) {
         this.socket = socket;

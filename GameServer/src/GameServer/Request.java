@@ -5,6 +5,9 @@
  */
 package GameServer;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.MD5;
+import model.Message;
 import model.Player;
 import model.User;
 
@@ -41,28 +45,29 @@ public class Request {
                     return createUser(result);
                 }
             }
-//            con.close();
+            con.close();
         } catch (SQLException ex) {
             Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    public boolean checkLogin(ArrayList<Player> list, String username) {
-        for (Player player : list) {
-            if(username.equals(player.user.getUsername())){
+
+    public boolean checkLogin(ArrayList<User> list, String username) {
+        for (User user : list) {
+            if (username.equals(user.getUsername())) {
                 return false;
             }
         }
         return true;
     }
+
     public void signup() {
 
     }
 
-    private User createUser(ResultSet result) {
+    public User createUser(ResultSet result) {
         try {
             User user = new User();
-
             user.setId(result.getInt("id"));
             user.setNickname(result.getString("nickname"));
             user.setUsername(result.getString("username"));
@@ -75,6 +80,32 @@ public class Request {
             return user;
         } catch (SQLException ex) {
             Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public void sendOnlineList(ObjectOutputStream oos, ArrayList<User> list) throws IOException {
+        oos.writeObject(new Message("loadOnline", list));
+        oos.flush();
+    }
+
+    public void challenge(ArrayList<Player> list, User user1, User user2) throws IOException {
+        Player player = getPlayer(list, user1.getUsername());
+        ObjectOutputStream oos = player.oos;
+        oos.writeObject(new Message("challenge", user2));
+        oos.flush();
+    }
+    public void repChallenge(ArrayList<Player> list, Message msg) throws IOException {
+        Player player = getPlayer(list, msg.getUser().getUsername());
+        ObjectOutputStream oos = player.oos;
+        oos.writeObject(msg);
+        oos.flush();
+    }
+    public Player getPlayer(ArrayList<Player> list, String username) {
+        for (Player p : list) {
+            if (p.user.getUsername().equals(username)) {
+                return p;
+            }
         }
         return null;
     }

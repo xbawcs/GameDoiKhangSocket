@@ -18,20 +18,31 @@ public class Message implements ToObject, Serializable {
     public static final long serialVersionUID = -3040096452457271695L;
     private String action = "";
     private String[] data;
-    private Player player;
-    private ArrayList<Player> list;
-    private String error = "";
+    private User user;
+    private ArrayList<User> list;
+    private String text = "";
 
     public Message() {
     }
 
-    public Message(String error) {
-        this.error = error;
+    public Message(String action) {
+        this.action = action;
     }
 
-    public Message(String action, Player player) {
+    public Message(String action, String text) {
+        this.text = text;
         this.action = action;
-        this.player = player;
+    }
+
+    public Message(String action, User user, String text) {
+        this.text = text;
+        this.action = action;
+        this.user = user;
+    }
+
+    public Message(String action, User user) {
+        this.action = action;
+        this.user = user;
     }
 
     public Message(String action, String[] data) {
@@ -39,14 +50,14 @@ public class Message implements ToObject, Serializable {
         this.data = data;
     }
 
-    public Message(String action, ArrayList<Player> list) {
+    public Message(String action, ArrayList<User> list) {
         this.action = action;
         this.list = list;
     }
 
-    public Message(String action, Player player, ArrayList<Player> list) {
+    public Message(String action, User user, ArrayList<User> list) {
         this.action = action;
-        this.player = player;
+        this.user = user;
         this.list = list;
     }
 
@@ -66,32 +77,32 @@ public class Message implements ToObject, Serializable {
         this.data = data;
     }
 
-    public Player getPlayer() {
-        return player;
+    public User getUser() {
+        return user;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public ArrayList<Player> getList() {
+    public ArrayList<User> getList() {
         return list;
     }
 
-    public void setList(ArrayList<Player> list) {
+    public void setList(ArrayList<User> list) {
         this.list = list;
     }
 
-    public String getError() {
-        return error;
+    public String getText() {
+        return text;
     }
 
-    public void setError(String error) {
-        this.error = error;
+    public void setText(String text) {
+        this.text = text;
     }
 
     @Override
     public Object[] toObject() {
-        return new Object[]{action, data, player, list, error};
+        return new Object[]{action, data, user, list, text};
     }
 }
