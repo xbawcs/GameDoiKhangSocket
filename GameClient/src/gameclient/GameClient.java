@@ -7,14 +7,14 @@ package gameclient;
 
 import Interface.Constant;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Player;
+import model.Question;
 import model.User;
+import view.GUI_Game;
+import view.GUI_GameOver;
 import view.GUI_Home;
 import view.GUI_Login;
 
@@ -30,6 +30,8 @@ public class GameClient implements Constant {
     public ArrayList<User> onlineList = new ArrayList<>();
     public GUI_Home gui_home;
     public GUI_Login gui_login;
+    public GUI_Game gui_game;
+    public ArrayList<Question> questions = new ArrayList<>();
 
     public void init() {
         try {

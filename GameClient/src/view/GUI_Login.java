@@ -148,11 +148,14 @@ public class GUI_Login extends javax.swing.JFrame {
                     System.out.println(ex);
                     Logger.getLogger(GUI_Login.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
             } else {
                 JOptionPane.showMessageDialog(this, "Please, enter username and password", "Error", JOptionPane.ERROR_MESSAGE);
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Player is online");
         }
+
     }//GEN-LAST:event_btnLoginActionPerformed
 
 //    /**

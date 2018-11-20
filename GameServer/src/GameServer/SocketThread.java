@@ -10,8 +10,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Message;
 import model.Player;
 import model.User;
@@ -49,24 +47,26 @@ public class SocketThread extends Request implements Runnable, Serializable {
                 switch (msg.getAction()) {
                     case "login":
                         this.login(msg);
-                        this.sendOnlineList(this.player.oos, this.game_server.onlineList);
                         break;
                     case "signup":
                         break;
                     case "logout":
 
                         break;
-                    case "loadOnline": 
+                    case "loadOnline":
                         this.sendOnlineList(this.player.oos, this.game_server.onlineList);
                         break;
                     case "challenge":
                         this.challenge(this.game_server.onlinePlayer, msg.getUser(), this.player.user);
                         break;
-                    case "repChallenge": 
-                        this.repChallenge(this.game_server.onlinePlayer, msg);
+                    case "repChallenge":
+                        this.repChallenge(this.game_server, msg, this.player);
+                        break;
+                    case "result": 
+                        this.result(this.game_server, msg, this.player);
                         break;
                     default:
-                        
+
                         break;
                 }
 
@@ -94,6 +94,8 @@ public class SocketThread extends Request implements Runnable, Serializable {
                 //send a message to the requested player
                 this.player.oos.writeObject(new Message("login", this.player.user));
                 this.player.oos.flush();
+                //send online list
+                this.sendOnlineList(this.player.oos, this.game_server.onlineList);
                 return;
             }
             this.player.oos.writeObject(new Message("login", "Username or password are incorrect"));

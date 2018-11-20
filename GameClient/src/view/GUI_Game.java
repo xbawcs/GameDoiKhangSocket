@@ -5,8 +5,19 @@
  */
 package view;
 
+import Interface.Constant;
+import gameclient.TimeWatch;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import model.Message;
+import model.Question;
 
 /**
  *
@@ -14,14 +25,69 @@ import java.awt.Toolkit;
  */
 public class GUI_Game extends javax.swing.JFrame {
 
+    public TimeWatch time;
+    public int currentQuestion = 0;
+    public int correctQuestion = 0;
+    public int matchID;
+    public String selectedAnswer = "";
+    public String[] yourAnswer = new String[15];
+    public ArrayList<Question> questions = new ArrayList<>();
+    public int timeover;
+    public Socket socket;
+
     /**
      * Creates new form GUI_Game
+     *
+     * @param questions
+     * @param socket
+     * @param matchID
      */
-    public GUI_Game() {
+    public GUI_Game(ArrayList<Question> questions, Socket socket, int matchID) {
         initComponents();
         //Set frame location         
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+        this.setAnswers(yourAnswer);
+        this.socket = socket;
+        this.matchID = matchID;
+        //
+        this.questions = questions;
+        this.time = new TimeWatch(this);
+        this.time.play();
+        displayQuestion(this.questions.get(0));
+    }
+
+    public void setAnswers(String[] answer) {
+        for (String string : answer) {
+            string = "";
+        }
+    }
+
+    public void displayQuestion(Question q) {
+        question.setText(currentQuestion + 1 + "");
+        content.setText(q.getContent());
+        ans1.setText(q.getAnswer1());
+        ans2.setText(q.getAnswer2());
+        ans3.setText(q.getAnswer3());
+        ans4.setText(q.getAnswer4());
+    }
+
+    public boolean checkAnswer(String ans) {
+        if (ans.equalsIgnoreCase(questions.get(this.currentQuestion).getKey())) {
+            return true;
+        }
+        return false;
+    }
+
+    public void sendResult() throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(this.socket.getOutputStream());
+        oos.writeObject(new Message("result", new String[]{this.matchID + "", this.correctQuestion + "", this.timeover + ""}));
+        oos.flush();
+    }
+
+    public void showResult(String result) {
+        GUI_GameOver gameover = new GUI_GameOver(result, this.correctQuestion, this.timeover, this.questions, this.yourAnswer);
+        gameover.setVisible(true);
     }
 
     /**
@@ -33,23 +99,274 @@ public class GUI_Game extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jPanel1 = new javax.swing.JPanel();
+        content = new javax.swing.JLabel();
+        ans1 = new javax.swing.JRadioButton();
+        ans2 = new javax.swing.JRadioButton();
+        ans3 = new javax.swing.JRadioButton();
+        ans4 = new javax.swing.JRadioButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtTime = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        question = new javax.swing.JLabel();
+        btnSubmit = new javax.swing.JButton();
+        btnNext = new javax.swing.JButton();
+        btnQuit = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        content.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        content.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        content.setText("Content.....");
+        content.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        buttonGroup1.add(ans1);
+        ans1.setText("Ans 1");
+        ans1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ans1ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(ans2);
+        ans2.setText("Ans 2");
+        ans2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ans2ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(ans3);
+        ans3.setText("Ans 3");
+        ans3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ans3ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(ans4);
+        ans4.setText("Ans 4");
+        ans4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ans4ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ans3)
+                    .addComponent(ans1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ans4)
+                    .addComponent(ans2))
+                .addGap(60, 60, 60))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(content, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(content, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ans1)
+                    .addComponent(ans2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ans4)
+                    .addComponent(ans3))
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        jLabel1.setText("Time remain: ");
+
+        jLabel2.setText("Question:");
+
+        jLabel3.setText("15");
+
+        txtTime.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtTime.setForeground(new java.awt.Color(0, 51, 255));
+        txtTime.setText("01:00");
+
+        jLabel4.setText("/");
+
+        question.setText("01");
+
+        btnSubmit.setText("Submit");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
+
+        btnNext.setText("Next");
+        btnNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextActionPerformed(evt);
+            }
+        });
+
+        btnQuit.setText("Quit");
+        btnQuit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuitActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtTime, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(question)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(1, 1, 1)
+                                .addComponent(jLabel3)))
+                        .addGap(32, 32, 32))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(btnSubmit)
+                        .addGap(72, 72, 72)
+                        .addComponent(btnNext)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnQuit)
+                        .addGap(53, 53, 53))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(txtTime)
+                    .addComponent(jLabel4)
+                    .addComponent(question))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSubmit)
+                    .addComponent(btnNext)
+                    .addComponent(btnQuit))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void ans3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ans3ActionPerformed
+        // TODO add your handling code here:
+        this.selectedAnswer = ans3.getText();
+    }//GEN-LAST:event_ans3ActionPerformed
+
+    private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
+        // TODO add your handling code here:
+        if (this.selectedAnswer.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please choose a answer");
+        } else {
+            this.yourAnswer[currentQuestion] = this.selectedAnswer;
+            //check answer
+            this.correctQuestion = checkAnswer(selectedAnswer) == true ? correctQuestion + 1 : correctQuestion;
+            this.selectedAnswer = "";
+            this.buttonGroup1.clearSelection();
+            this.currentQuestion++;
+            if (this.currentQuestion < 15) {
+                displayQuestion(this.questions.get(this.currentQuestion));
+            } else {
+                btnNext.setEnabled(false);
+            }
+        }
+    }//GEN-LAST:event_btnNextActionPerformed
+
+    private void ans1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ans1ActionPerformed
+        // TODO add your handling code here:
+        this.selectedAnswer = ans1.getText();
+    }//GEN-LAST:event_ans1ActionPerformed
+
+    private void ans2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ans2ActionPerformed
+        // TODO add your handling code here:
+        this.selectedAnswer = ans2.getText();
+    }//GEN-LAST:event_ans2ActionPerformed
+
+    private void ans4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ans4ActionPerformed
+        // TODO add your handling code here:
+        this.selectedAnswer = ans4.getText();
+    }//GEN-LAST:event_ans4ActionPerformed
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        try {
+            // TODO add your handling code here:
+            this.btnSubmit.setEnabled(false);
+            this.btnNext.setEnabled(false);
+            this.time.stop();
+            this.timeover = Constant.TIME_PLAY - this.time.time;
+            sendResult();
+            JOptionPane.showMessageDialog(this, "Waiting for the other player...");
+        } catch (IOException ex) {
+            Logger.getLogger(GUI_Game.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
+    private void btnQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_btnQuitActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton ans1;
+    private javax.swing.JRadioButton ans2;
+    private javax.swing.JRadioButton ans3;
+    private javax.swing.JRadioButton ans4;
+    private javax.swing.JButton btnNext;
+    private javax.swing.JButton btnQuit;
+    public javax.swing.JButton btnSubmit;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JLabel content;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel question;
+    public javax.swing.JLabel txtTime;
     // End of variables declaration//GEN-END:variables
 }

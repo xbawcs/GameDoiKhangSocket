@@ -19,7 +19,7 @@ public class Message implements ToObject, Serializable {
     private String action = "";
     private String[] data;
     private User user;
-    private ArrayList<User> list;
+    private ArrayList list;
     private String text = "";
 
     public Message() {
@@ -34,6 +34,25 @@ public class Message implements ToObject, Serializable {
         this.action = action;
     }
 
+    public Message(String action, User user, String text) {
+        this.text = text;
+        this.action = action;
+        this.user = user;
+    }
+
+    public Message(String action, String text, String[] data) {
+        this.text = text;
+        this.action = action;
+        this.data = data;
+    }
+
+    public Message(String action, ArrayList list, String text, String[] data) {
+        this.text = text;
+        this.action = action;
+        this.data = data;
+        this.list = list;
+    }
+
     public Message(String action, User user) {
         this.action = action;
         this.user = user;
@@ -44,14 +63,20 @@ public class Message implements ToObject, Serializable {
         this.data = data;
     }
 
-    public Message(String action, ArrayList<User> list) {
+    public Message(String action, ArrayList list) {
         this.action = action;
         this.list = list;
     }
 
-    public Message(String action, User user, ArrayList<User> list) {
+    public Message(String action, User user, ArrayList list) {
         this.action = action;
         this.user = user;
+        this.list = list;
+    }
+
+    public Message(String action, ArrayList list, String text) {
+        this.action = action;
+        this.text = text;
         this.list = list;
     }
 
@@ -79,11 +104,11 @@ public class Message implements ToObject, Serializable {
         this.user = user;
     }
 
-    public ArrayList<User> getList() {
+    public ArrayList getList() {
         return list;
     }
 
-    public void setList(ArrayList<User> list) {
+    public void setList(ArrayList list) {
         this.list = list;
     }
 

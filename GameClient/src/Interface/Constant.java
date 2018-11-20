@@ -17,4 +17,5 @@ public interface Constant {
     String DB_PASSWORD = "";
     int SOCKET_PORT = 6556;
     String IP_SERVER = "127.0.0.1";
+    int TIME_PLAY = 90;
 }

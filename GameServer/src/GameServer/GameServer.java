@@ -13,8 +13,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import model.Match;
 import model.Player;
 import model.User;
 import view.GUI_Server;
@@ -26,9 +25,10 @@ import view.GUI_Server;
 public class GameServer implements Runnable, Constant {
 
     ServerSocket serverSocket;
-    public static ArrayList<User> onlineList = new ArrayList<>();
-    public static ArrayList<Player> onlinePlayer = new ArrayList<>();
-    public static ArrayList<User> allUser = new ArrayList<>();
+    public ArrayList<User> onlineList = new ArrayList<>();
+    public ArrayList<Player> onlinePlayer = new ArrayList<>();
+    public ArrayList<User> allUser = new ArrayList<>();
+    public ArrayList<Match> matchList = new ArrayList<>();
     public Connection connect = null;
     GUI_Server gui_server;
     boolean keepGoing = true;
