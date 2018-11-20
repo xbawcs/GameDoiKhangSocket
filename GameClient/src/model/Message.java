@@ -15,11 +15,10 @@ import java.util.ArrayList;
  */
 public class Message implements ToObject, Serializable {
 
-    public static final long serialVersionUID = -3040096452457271695L;
     private String action = "";
     private String[] data;
     private User user;
-    private ArrayList list;
+    private ArrayList list = new ArrayList<>();
     private String text = "";
 
     public Message() {
@@ -53,7 +52,7 @@ public class Message implements ToObject, Serializable {
         this.list = list;
     }
 
-    public Message(String action, User user, String text) {
+    public Message(String action, String text,  User user) {
         this.text = text;
         this.action = action;
         this.user = user;

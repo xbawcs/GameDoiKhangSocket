@@ -6,12 +6,17 @@
 package view;
 
 import GameServer.GameServer;
+import GameServer.OnlineListThread;
 import Interface.Constant;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import model.Match;
+import model.Player;
+import model.User;
 
 /**
  *
@@ -21,6 +26,11 @@ public class GUI_Server extends javax.swing.JFrame implements Constant {
 
     SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a");
     GameServer gameServer;
+    public static ArrayList<User> onlineList = new ArrayList<>();
+    public static ArrayList<Player> onlinePlayer = new ArrayList<>();
+    public static ArrayList<User> allUser = new ArrayList<>();
+    public static ArrayList<Match> matchList = new ArrayList<>();
+    Thread t;
 
     /**
      * Creates new form GUI_Server
@@ -142,8 +152,9 @@ public class GUI_Server extends javax.swing.JFrame implements Constant {
     private void btnStartServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartServerActionPerformed
         gameServer = new GameServer(this, SOCKET_PORT);
 
-        new Thread(gameServer).start();
-
+        t = new Thread(gameServer);
+        t.start();
+        new Thread(new OnlineListThread(this)).start();
         btnStopServer.setEnabled(true);
         btnStartServer.setEnabled(false);
     }//GEN-LAST:event_btnStartServerActionPerformed

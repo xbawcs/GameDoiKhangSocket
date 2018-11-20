@@ -14,9 +14,9 @@ import java.util.logging.Logger;
 import model.Question;
 import model.User;
 import view.GUI_Game;
-import view.GUI_GameOver;
 import view.GUI_Home;
 import view.GUI_Login;
+import view.GUI_Signup;
 
 /**
  *
@@ -30,6 +30,7 @@ public class GameClient implements Constant {
     public ArrayList<User> onlineList = new ArrayList<>();
     public GUI_Home gui_home;
     public GUI_Login gui_login;
+    public GUI_Signup gui_signup;
     public GUI_Game gui_game;
     public ArrayList<Question> questions = new ArrayList<>();
 
@@ -38,9 +39,10 @@ public class GameClient implements Constant {
             //Create socket 
             this.socket = new Socket(IP_SERVER, SOCKET_PORT);
             new Thread(new ReceivingThread(this)).start();
-
+            System.out.println(socket);
             this.gui_login = new GUI_Login(this);
             this.gui_login.setVisible(true);
+            this.gui_signup = new GUI_Signup(this);
         } catch (IOException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         }

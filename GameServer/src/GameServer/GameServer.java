@@ -25,14 +25,9 @@ import view.GUI_Server;
 public class GameServer implements Runnable, Constant {
 
     ServerSocket serverSocket;
-    public ArrayList<User> onlineList = new ArrayList<>();
-    public ArrayList<Player> onlinePlayer = new ArrayList<>();
-    public ArrayList<User> allUser = new ArrayList<>();
-    public ArrayList<Match> matchList = new ArrayList<>();
     public Connection connect = null;
     GUI_Server gui_server;
     boolean keepGoing = true;
-    Thread sendListOnline;
 
     public GameServer(GUI_Server gui_server, int port) {
         //start server
@@ -69,7 +64,7 @@ public class GameServer implements Runnable, Constant {
         while (keepGoing) {
             try {
                 Socket socket = serverSocket.accept();
-                new Thread(new SocketThread(this, socket)).start();
+                new Thread(new SocketThread(gui_server, socket, connect)).start();
 
             } catch (IOException ex) {
                 gui_server.appendMessage("[Server IOExepion]:  " + ex.getMessage());
@@ -83,7 +78,7 @@ public class GameServer implements Runnable, Constant {
             serverSocket.close();
             keepGoing = false;
             gui_server.appendMessage("[Server]: Server stoped");
-            System.out.println("Máy Chủ bị đóng..!");
+            System.out.println("[Server]: Server stoped");
             System.exit(0);
         } catch (IOException e) {
             System.out.println(e.getMessage());
