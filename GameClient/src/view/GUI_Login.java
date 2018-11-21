@@ -62,10 +62,6 @@ public class GUI_Login extends javax.swing.JFrame {
 
         jLabel3.setText("Password");
 
-        txtUsername.setText("example");
-
-        txtPassword.setText("jPasswordField1");
-
         btnCreateAccount.setText("Create Account");
         btnCreateAccount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -138,11 +134,10 @@ public class GUI_Login extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         if (!this.gameclient.isLogin) {
             if (!"".equals(this.txtUsername.getText()) && !"".equals(this.txtPassword.getText())) {
-                ObjectOutputStream oos = null;
                 try {
                     String username = this.txtUsername.getText();
                     String password = this.txtPassword.getText();
-                    oos = new ObjectOutputStream(this.gameclient.socket.getOutputStream());
+                    ObjectOutputStream oos = new ObjectOutputStream(this.gameclient.socket.getOutputStream());
                     oos.writeObject(new Message("login", new String[]{username, password}));
                     oos.flush();
                 } catch (IOException ex) {

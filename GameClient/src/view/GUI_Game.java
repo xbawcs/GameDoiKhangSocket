@@ -6,6 +6,7 @@
 package view;
 
 import Interface.Constant;
+import gameclient.GameClient;
 import gameclient.TimeWatch;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -36,15 +37,18 @@ public class GUI_Game extends javax.swing.JFrame {
     public int timeover;
     public Socket socket;
     public User enemy;
+    GameClient gameclient;
+
     /**
      * Creates new form GUI_Game
      *
+     * @param gameclient
      * @param questions
      * @param socket
      * @param matchID
      * @param enemy
      */
-    public GUI_Game(ArrayList<Question> questions, Socket socket, int matchID, User enemy) {
+    public GUI_Game(GameClient gameclient, ArrayList<Question> questions, Socket socket, int matchID, User enemy) {
         initComponents();
         //Set frame location         
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -55,8 +59,14 @@ public class GUI_Game extends javax.swing.JFrame {
         this.enemy = enemy;
         this.questions = questions;
         this.time = new TimeWatch(this);
+        if (this.questions.size() > 0) {
+            displayQuestion(this.questions.get(0));
+        }
+        this.gameclient = gameclient;
+    }
+
+    public void play() {
         this.time.play();
-        displayQuestion(this.questions.get(0));
     }
 
     public void setAnswers(String[] answer) {
@@ -88,8 +98,8 @@ public class GUI_Game extends javax.swing.JFrame {
     }
 
     public void showResult(String result) {
-        GUI_GameOver gameover = new GUI_GameOver(result, this);
-        gameover.setVisible(true);
+        this.gameclient.gui_gameover = new GUI_GameOver(result, this);
+        this.gameclient.gui_gameover.setVisible(true);
     }
 
     /**

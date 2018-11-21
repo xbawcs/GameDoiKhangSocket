@@ -8,12 +8,14 @@ package model;
 import Interface.ToObject;
 import java.io.Serializable;
 import java.util.HashMap;
+
 /**
  *
  * @author nguye
  */
-public class User implements ToObject, Serializable{
- 
+public class User implements ToObject, Serializable {
+
+    private static final long serialVersionUID = 1L;
     private int id;
     private String username;
     private String nickname;

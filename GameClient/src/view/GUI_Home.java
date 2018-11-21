@@ -13,11 +13,9 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Message;
-import model.Player;
 import model.User;
 
 /**
@@ -214,7 +212,6 @@ public class GUI_Home extends javax.swing.JFrame {
 
     private void updateOnlineListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateOnlineListActionPerformed
         try {
-            // TODO add your handling code here:
             ObjectOutputStream oos = new ObjectOutputStream(this.game_client.socket.getOutputStream());
             oos.writeObject(new Message("loadOnline"));
             oos.flush();

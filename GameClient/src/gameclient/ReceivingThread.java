@@ -107,8 +107,8 @@ public class ReceivingThread implements Runnable {
     }
     
     public void challenge(User user) throws IOException {
-//        this.game_client.gui_game.setVisible(false);
-//        this.game_client.gui_gameover.setVisible(false);
+        this.game_client.gui_game.setVisible(false);
+        this.game_client.gui_gameover.setVisible(false);
         int comfirm = JOptionPane.showConfirmDialog(null, user.getNickname().toUpperCase() + " wants to challenge you.\n Do you agree?");
         oos = new ObjectOutputStream(this.game_client.socket.getOutputStream());
         if (comfirm == 0) {
@@ -121,7 +121,8 @@ public class ReceivingThread implements Runnable {
     
     public void repChallenge(Message msg) throws IOException {
         if ("yes".equalsIgnoreCase(msg.getText())) {
-            this.game_client.gui_game = new GUI_Game(msg.getList(), this.game_client.socket, Integer.parseInt(msg.getData()[0]), msg.getUser());
+            this.game_client.gui_game = new GUI_Game(this.game_client,msg.getList(), this.game_client.socket, Integer.parseInt(msg.getData()[0]), msg.getUser());
+            this.game_client.gui_game.play();
         } else {
             JOptionPane.showMessageDialog(null, msg.getUser().getNickname().toUpperCase() + " has refused");
         }
@@ -130,12 +131,16 @@ public class ReceivingThread implements Runnable {
     public void result(Message msg) {
         if ("win".equals(msg.getText())) {
             this.game_client.gui_game.showResult("You win!!!");
+            this.game_client.gui_game.time.stop();
             return;
         }
         if ("lose".equals(msg.getText())) {
             this.game_client.gui_game.showResult("You lose!!!");
+            this.game_client.gui_game.time.stop();
+            this.game_client.gui_game.btnSubmit.setEnabled(false);
             return;
         }
         this.game_client.gui_game.showResult("You have a draw!!!");
+        this.game_client.gui_game.time.stop();
     }
 }

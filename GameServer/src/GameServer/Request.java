@@ -75,7 +75,6 @@ public class Request {
                     return createUser(result);
                 }
             }
-//            con.close();
         } catch (SQLException ex) {
             Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -258,8 +257,6 @@ public class Request {
         user.setTime(time);
         try {
             String query = "UPDATE `users` SET `scores` = ?, `win` = ?, `matches` = ?, `time` = ? WHERE `username` = ?";
-            ResultSet result;
-
             try (PreparedStatement ps = con.prepareStatement(query)) {
                 ps.setDouble(1, user.getScore());
                 ps.setInt(2, user.getWin());
@@ -268,7 +265,6 @@ public class Request {
                 ps.setString(5, user.getUsername());
                 ps.executeUpdate();
             }
-//            con.close();
         } catch (SQLException ex) {
             Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
         }

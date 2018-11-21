@@ -65,7 +65,6 @@ public class GameServer implements Runnable, Constant {
             try {
                 Socket socket = serverSocket.accept();
                 new Thread(new SocketThread(gui_server, socket, connect)).start();
-
             } catch (IOException ex) {
                 gui_server.appendMessage("[Server IOExepion]:  " + ex.getMessage());
             }
