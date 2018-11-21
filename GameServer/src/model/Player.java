@@ -18,7 +18,7 @@ public class Player implements Serializable {
     public Socket socket;
     public User user;
     public int status;
-    public ObjectOutputStream oos;
+    public ObjectOutputStream oos = null;
 
     public Player(Socket socket, User user) {
         this.socket = socket;

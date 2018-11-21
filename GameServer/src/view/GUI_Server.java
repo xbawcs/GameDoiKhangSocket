@@ -154,7 +154,7 @@ public class GUI_Server extends javax.swing.JFrame implements Constant {
 
         t = new Thread(gameServer);
         t.start();
-        new Thread(new OnlineListThread(this)).start();
+//        new Thread(new OnlineListThread(this)).start();
         btnStopServer.setEnabled(true);
         btnStartServer.setEnabled(false);
     }//GEN-LAST:event_btnStartServerActionPerformed

@@ -48,7 +48,7 @@ public class Request {
                 player.oos.flush();
                 //send online list
                 this.sendOnlineList(player.oos, gui_server.onlineList);
-                this.sendRank("scores",player);
+                this.sendRank("scores", player);
                 return;
             }
             player.oos.writeObject(new Message("login", "Username or password are incorrect"));
@@ -196,13 +196,13 @@ public class Request {
         Player player2 = getPlayer(gui_server.onlinePlayer, match.getUser1().getUsername().equalsIgnoreCase(player1.user.getUsername()) ? match.getUser2().getUsername() : match.getUser1().getUsername());
 
         if ("15".equals(msg.getData()[1])) {
-            saveResult(1, player1.user);
+            saveResult(1, msg.getData()[2], player1.user);
             //send result to player 1
             updateStatus(player1, gui_server, "online");
             player1.oos.writeObject(new Message("result", "win"));
             player1.oos.flush();
             //save and send result to player 2
-            saveResult(0, player2.user);
+            saveResult(0, msg.getData()[2], player2.user);
             updateStatus(player2, gui_server, "online");
             player2.oos.writeObject(new Message("result", "lose"));
             player2.oos.flush();
@@ -212,13 +212,13 @@ public class Request {
                 match.setText1(new String[]{msg.getData()[0]});
                 if (!"".equals(match.getText2()[0])) {
                     //save
-                    saveResult(0.5, player1.user);
+                    saveResult(0.5, msg.getData()[2], player1.user);
                     //send result to player 1
                     updateStatus(player1, gui_server, "online");
                     player1.oos.writeObject(new Message("result", "draw"));
                     player1.oos.flush();
                     //save
-                    saveResult(0.5, player2.user);
+                    saveResult(0.5, msg.getData()[2], player2.user);
                     //send result to player 2
                     updateStatus(player2, gui_server, "online");
                     player2.oos.writeObject(new Message("result", "draw"));
@@ -229,12 +229,12 @@ public class Request {
                 match.setText2(new String[]{msg.getData()[0]});
                 if (!"".equals(match.getText1()[0])) {
                     //save and send result to player 1
-                    saveResult(0.5, player1.user);
+                    saveResult(0.5, msg.getData()[2], player1.user);
                     updateStatus(player1, gui_server, "online");
                     player1.oos.writeObject(new Message("result", "draw"));
                     player1.oos.flush();
                     //save and send result to player 2
-                    saveResult(0.5, player2.user);
+                    saveResult(0.5, msg.getData()[2], player2.user);
                     updateStatus(player2, gui_server, "online");
                     player2.oos.writeObject(new Message("result", "draw"));
                     player2.oos.flush();
@@ -245,20 +245,27 @@ public class Request {
 
     }
 
-    public void saveResult(double score, User user) {
+    public void saveResult(double score, String timeover, User user) {
         int win = score == 1 ? 1 : 0;
+        int time = user.getTime();
+        //Thắng thì thay đổi lại thời gian trung bình của lần thắng
+        if (win == 1) {
+            time = (user.getTime() * user.getWin() + win * Integer.parseInt(timeover)) / (user.getWin() + 1);
+        }
         user.setNumOfmatches(user.getNumOfmatches() + 1);
         user.setScore(user.getScore() + score);
         user.setWin(user.getWin() + win);
+        user.setTime(time);
         try {
-            String query = "UPDATE `users` SET `scores` = ?, `win` = ?, `matches` = ? WHERE `username` = ?";
+            String query = "UPDATE `users` SET `scores` = ?, `win` = ?, `matches` = ?, `time` = ? WHERE `username` = ?";
             ResultSet result;
 
             try (PreparedStatement ps = con.prepareStatement(query)) {
                 ps.setDouble(1, user.getScore());
                 ps.setInt(2, user.getWin());
                 ps.setInt(3, user.getNumOfmatches());
-                ps.setString(4, user.getUsername());
+                ps.setInt(4, time);
+                ps.setString(5, user.getUsername());
                 ps.executeUpdate();
             }
 //            con.close();
