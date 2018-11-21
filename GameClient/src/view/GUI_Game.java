@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Message;
 import model.Question;
+import model.User;
 
 /**
  *
@@ -34,15 +35,16 @@ public class GUI_Game extends javax.swing.JFrame {
     public ArrayList<Question> questions = new ArrayList<>();
     public int timeover;
     public Socket socket;
-
+    public User enemy;
     /**
      * Creates new form GUI_Game
      *
      * @param questions
      * @param socket
      * @param matchID
+     * @param enemy
      */
-    public GUI_Game(ArrayList<Question> questions, Socket socket, int matchID) {
+    public GUI_Game(ArrayList<Question> questions, Socket socket, int matchID, User enemy) {
         initComponents();
         //Set frame location         
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -50,7 +52,7 @@ public class GUI_Game extends javax.swing.JFrame {
         this.setAnswers(yourAnswer);
         this.socket = socket;
         this.matchID = matchID;
-        //
+        this.enemy = enemy;
         this.questions = questions;
         this.time = new TimeWatch(this);
         this.time.play();
@@ -86,7 +88,7 @@ public class GUI_Game extends javax.swing.JFrame {
     }
 
     public void showResult(String result) {
-        GUI_GameOver gameover = new GUI_GameOver(result, this.correctQuestion, this.timeover, this.questions, this.yourAnswer);
+        GUI_GameOver gameover = new GUI_GameOver(result, this);
         gameover.setVisible(true);
     }
 

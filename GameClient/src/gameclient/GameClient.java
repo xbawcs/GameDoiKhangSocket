@@ -13,7 +13,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Question;
 import model.User;
+import view.GUI_DetailGame;
 import view.GUI_Game;
+import view.GUI_GameOver;
 import view.GUI_Home;
 import view.GUI_Login;
 import view.GUI_Signup;
@@ -32,6 +34,8 @@ public class GameClient implements Constant {
     public GUI_Login gui_login;
     public GUI_Signup gui_signup;
     public GUI_Game gui_game;
+    public GUI_GameOver gui_gameover;
+    public GUI_DetailGame gui_detailgame;
     public ArrayList<Question> questions = new ArrayList<>();
 
     public void init() {

@@ -45,7 +45,7 @@ public class GUI_Home extends javax.swing.JFrame {
         DefaultTableModel dtm;
         dtm = (DefaultTableModel) this.tblRank.getModel();
         for (int i = 0; i < 10; i++) {
-            dtm.addRow(new Object[]{i + 1 + "",users.get(i).getNickname(), users.get(i).getScore()});
+            dtm.addRow(new Object[]{i + 1 + "", users.get(i).getNickname(), users.get(i).getScore()});
         }
     }
 
@@ -220,10 +220,6 @@ public class GUI_Home extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_updateOnlineListActionPerformed
 
-    private void cbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStatusActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbStatusActionPerformed
-
     private void onlineListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_onlineListMouseClicked
         // TODO add your handling code here:
         if (evt.getClickCount() == 2) {
@@ -249,6 +245,17 @@ public class GUI_Home extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_onlineListMouseClicked
+
+    private void cbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStatusActionPerformed
+        try {
+            // TODO add your handling code here:
+            ObjectOutputStream oos = new ObjectOutputStream(this.game_client.socket.getOutputStream());
+            oos.writeObject(new Message("updateStatus", cbStatus.getSelectedItem() + ""));
+            oos.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(GUI_Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_cbStatusActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

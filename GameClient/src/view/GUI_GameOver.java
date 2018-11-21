@@ -7,10 +7,15 @@ package view;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Message;
 import model.Question;
+import model.User;
 
 /**
  *
@@ -18,27 +23,23 @@ import model.Question;
  */
 public class GUI_GameOver extends javax.swing.JFrame {
 
-    ArrayList<Question> questions = new ArrayList<>();
-    String[] yourAnswer;
+    GUI_Game gui_game;
 
     /**
      * Creates new form GUI_GameOver
      *
      * @param result
-     * @param correctQuestion
-     * @param timeover
-     * @param question
-     * @param yourAnswer
+     * @param gui_game
      */
-    public GUI_GameOver(String result, int correctQuestion, int timeover, ArrayList<Question> questions, String[] yourAnswer) {
+    public GUI_GameOver(String result, GUI_Game gui_game) {
         initComponents();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+        this.gui_game = gui_game;
         this.text.setText(result);
-        this.time.setText(showTime(timeover));
-        this.numberCorrect.setText(correctQuestion + "");
-        this.questions = questions;
-        this.yourAnswer = yourAnswer;
+        this.time.setText(showTime(gui_game.timeover));
+        this.numberCorrect.setText(gui_game.correctQuestion + "");
+
     }
 
     public String showTime(int time) {
@@ -170,15 +171,21 @@ public class GUI_GameOver extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        ObjectOutputStream oos = new ObjectOutputStream(this.socket.getOutputStream());
-        oos.writeObject(new Message("challenge", user));
-        oos.flush();
+        this.gui_game.setVisible(false);
+        this.setVisible(false);
+        try {
+            // TODO add your handling code here:
+            ObjectOutputStream oos = new ObjectOutputStream(this.gui_game.socket.getOutputStream());
+            oos.writeObject(new Message("challenge", this.gui_game.enemy));
+            oos.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(GUI_GameOver.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        GUI_DetailGame detail = new GUI_DetailGame(questions, yourAnswer);
+        GUI_DetailGame detail = new GUI_DetailGame(this.gui_game.questions, this.gui_game.yourAnswer);
         detail.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 

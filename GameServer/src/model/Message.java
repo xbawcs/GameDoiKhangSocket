@@ -40,6 +40,14 @@ public class Message implements ToObject, Serializable {
         this.list = list;
     }
 
+    public Message(String action, ArrayList list, String text, String[] data, User user) {
+        this.text = text;
+        this.action = action;
+        this.data = data;
+        this.list = list;
+        this.user = user;
+    }
+
     public Message(String action, String text, String[] data) {
         this.text = text;
         this.action = action;

@@ -120,7 +120,7 @@ public class ReceivingThread implements Runnable {
     
     public void repChallenge(Message msg) throws IOException {
         if ("yes".equalsIgnoreCase(msg.getText())) {
-            this.game_client.gui_game = new GUI_Game(msg.getList(), this.game_client.socket, Integer.parseInt(msg.getData()[0]));
+            this.game_client.gui_game = new GUI_Game(msg.getList(), this.game_client.socket, Integer.parseInt(msg.getData()[0]), msg.getUser());
         } else {
             JOptionPane.showMessageDialog(null, msg.getUser().getNickname().toUpperCase() + " has refused");
         }

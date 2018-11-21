@@ -75,6 +75,12 @@ public class SocketThread implements Runnable, Serializable {
                     case "result":
                         request.result(gui_server, msg, this.player);
                         break;
+                    case "replay":
+                        request.challenge(gui_server.onlinePlayer, msg.getUser(), this.player.user);
+                        break;
+                    case "updateStatus":
+                        request.updateStatus(player, gui_server, msg.getText());
+                        break;
                     default:
 
                         break;

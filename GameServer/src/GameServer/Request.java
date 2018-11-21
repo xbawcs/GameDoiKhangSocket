@@ -172,12 +172,15 @@ public class Request {
             ArrayList<Question> questionList = getQuestions();
             //create match and add into match list
             gui_server.matchList.add(new Match(player.user, player1.user));
-            Message message = new Message("repChallenge", questionList, "yes", new String[]{player.user.getId() + ""});
+            Message message1 = new Message("repChallenge", questionList, "yes", new String[]{player.user.getId() + ""}, player1.user);
             //send the question for player 1
-            player.oos.writeObject(message);
+            updateStatus(player, gui_server, "busy");
+            player.oos.writeObject(message1);
             player.oos.flush();
             //send the question for player 2
-            player1.oos.writeObject(message);
+            Message message2 = new Message("repChallenge", questionList, "yes", new String[]{player.user.getId() + ""}, player.user);
+            updateStatus(player1, gui_server, "busy");
+            player1.oos.writeObject(message2);
             player1.oos.flush();
         } else {
             Message message = new Message("repChallenge", "no", player1.user);
@@ -193,10 +196,12 @@ public class Request {
         if ("15".equals(msg.getData()[1])) {
             saveResult(1, player1.user);
             //send result to player 1
+            updateStatus(player1, gui_server, "online");
             player1.oos.writeObject(new Message("result", "win"));
             player1.oos.flush();
             //save and send result to player 2
             saveResult(0, player2.user);
+            updateStatus(player2, gui_server, "online");
             player2.oos.writeObject(new Message("result", "lose"));
             player2.oos.flush();
             gui_server.matchList.remove(match);
@@ -207,11 +212,13 @@ public class Request {
                     //save
                     saveResult(0.5, player1.user);
                     //send result to player 1
+                    updateStatus(player1, gui_server, "online");
                     player1.oos.writeObject(new Message("result", "draw"));
                     player1.oos.flush();
                     //save
                     saveResult(0.5, player2.user);
                     //send result to player 2
+                    updateStatus(player2, gui_server, "online");
                     player2.oos.writeObject(new Message("result", "draw"));
                     player2.oos.flush();
                     gui_server.matchList.remove(match);
@@ -221,10 +228,12 @@ public class Request {
                 if (!"".equals(match.getText1()[0])) {
                     //save and send result to player 1
                     saveResult(0.5, player1.user);
+                    updateStatus(player1, gui_server, "online");
                     player1.oos.writeObject(new Message("result", "draw"));
                     player1.oos.flush();
                     //save and send result to player 2
                     saveResult(0.5, player2.user);
+                    updateStatus(player2, gui_server, "online");
                     player2.oos.writeObject(new Message("result", "draw"));
                     player2.oos.flush();
                     gui_server.matchList.remove(match);
@@ -232,12 +241,6 @@ public class Request {
             }
         }
 
-    }
-
-    public void updateStatus(User user) {
-//        for    {
-//
-//        }
     }
 
     public void saveResult(double score, User user) {
@@ -334,5 +337,14 @@ public class Request {
             Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public void updateStatus(Player player, GUI_Server gui_server, String status) {
+        for (int i = 0; i < gui_server.onlineList.size(); i++) {
+            if (gui_server.onlineList.get(i).getUsername().equals(player.user.getUsername())) {
+                gui_server.onlineList.get(i).setStatus("busy".equalsIgnoreCase(status) ? 0 : 1);
+                gui_server.onlinePlayer.get(i).setStatus("busy".equalsIgnoreCase(status) ? 0 : 1);
+            }
+        }
     }
 }
