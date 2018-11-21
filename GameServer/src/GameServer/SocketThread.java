@@ -64,7 +64,7 @@ public class SocketThread implements Runnable, Serializable {
                         request.sendOnlineList(this.player.oos, gui_server.onlineList);
                         break;
                     case "rank":
-                        request.sendRank(this.player);
+                        request.sendRank(msg.getText(),this.player);
                         break;
                     case "challenge":
                         request.challenge(gui_server.onlinePlayer, msg.getUser(), this.player.user);

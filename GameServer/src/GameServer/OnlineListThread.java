@@ -31,7 +31,7 @@ public class OnlineListThread implements Runnable {
                 for(Player player : gui_server.onlinePlayer) {
                     System.out.println(gui_server.onlinePlayer.size() + "--" + gui_server.onlineList.size());
                     System.out.println(player.socket);
-                    player.oos.writeObject(new Message("loadOnline", gui_server.onlineList, "nhan oke"));
+                    player.oos.writeObject(new Message("loadOnline", gui_server.onlineList, gui_server.onlinePlayer.size() + ""));
                     player.oos.flush();
                 }
                 Thread.sleep(2000);

@@ -16,5 +16,5 @@ public interface Constant {
     String DB_USERNAME = "root";
     String DB_PASSWORD = "";
     int SOCKET_PORT = 6556;
-    String IP_SERVER = "127.0.0.1";
+    String IP_SERVER = "192.168.43.8";
 }

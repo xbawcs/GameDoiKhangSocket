@@ -13,7 +13,8 @@ import java.util.HashMap;
  *
  * @author nguye
  */
-public class User implements ToObject, Serializable{
+public class User implements ToObject, Serializable {
+
     private int id;
     private String username;
     private String nickname;
@@ -21,16 +22,18 @@ public class User implements ToObject, Serializable{
     private int numOfmatches;//Số game đã chơi
     private int win;
     private int status; //trạng thái của ng chới(avaliable or busy)
-    private double score;
+    private double scores;
+    private int time;
 
     public User() {
     }
+
     public User(HashMap user) {
         this.id = Integer.parseInt(user.get("id") + "");
         this.nickname = user.get("nickname") + "";
         this.numOfmatches = Integer.parseInt(user.get("numOfMatches") + "");
         this.password = user.get("password") + "";
-        this.score = Integer.parseInt(user.get("score") + "");
+        this.scores = Integer.parseInt(user.get("scores") + "");
         this.status = Integer.parseInt(user.get("status") + "");
         this.username = user.get("username") + "";
         this.win = Integer.parseInt(user.get("win") + "");
@@ -43,7 +46,7 @@ public class User implements ToObject, Serializable{
     public void setWin(int win) {
         this.win = win;
     }
-    
+
     public int getId() {
         return id;
     }
@@ -93,16 +96,24 @@ public class User implements ToObject, Serializable{
     }
 
     public double getScore() {
-        return score;
+        return scores;
     }
 
-    public void setScore(double score) {
-        this.score = score;
+    public void setScore(double scores) {
+        this.scores = scores;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
 
     @Override
     public Object[] toObject() {
-        return new Object[]{id, username, nickname, password, numOfmatches, win, status, score};
+        return new Object[]{id, username, nickname, password, numOfmatches, win, status, scores, time};
     }
-    
+
 }

@@ -48,7 +48,7 @@ public class Request {
                 player.oos.flush();
                 //send online list
                 this.sendOnlineList(player.oos, gui_server.onlineList);
-                this.sendRank(player);
+                this.sendRank("scores",player);
                 return;
             }
             player.oos.writeObject(new Message("login", "Username or password are incorrect"));
@@ -103,7 +103,7 @@ public class Request {
 
     public void addUser(String[] data) {
         try {
-            String query = "INSERT INTO `users` (`username`, `password`, `nickname`, `scores`, `matches`, `win`) VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO `users` (`username`, `password`, `nickname`, `scores`, `matches`, `win`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = con.prepareStatement(query)) {
                 ps.setString(1, data[0]);
                 ps.setString(2, MD5.md5(data[1]));
@@ -111,6 +111,7 @@ public class Request {
                 ps.setDouble(4, 0);
                 ps.setInt(5, 0);
                 ps.setInt(6, 0);
+                ps.setInt(7, 0);
                 ps.executeUpdate();
             }
         } catch (SQLException ex) {
@@ -145,6 +146,7 @@ public class Request {
             user.setNumOfmatches(result.getInt("matches"));
             user.setWin(result.getInt("win"));
             user.setScore(result.getInt("scores"));
+            user.setTime(result.getInt("time"));
             user.setStatus(1);
 
             return user;
@@ -315,13 +317,13 @@ public class Request {
         return q;
     }
 
-    public void sendRank(Player player) throws IOException {
-        player.oos.writeObject(new Message("rank", getRank(10)));
+    public void sendRank(String text, Player player) throws IOException {
+        player.oos.writeObject(new Message("rank", getRank(10, text)));
         player.oos.flush();
     }
 
-    public ArrayList<User> getRank(int i) {
-        String query = "SELECT * FROM `users` ORDER BY `scores` DESC LIMIT " + i;
+    public ArrayList<User> getRank(int i, String text) {
+        String query = "SELECT * FROM `users` ORDER BY `" + text + "` DESC LIMIT " + i;
         ResultSet result;
         ArrayList<User> list = new ArrayList<>();
         User user;

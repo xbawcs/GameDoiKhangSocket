@@ -47,8 +47,9 @@ public class GameClient implements Constant {
             this.gui_login = new GUI_Login(this);
             this.gui_login.setVisible(true);
             this.gui_signup = new GUI_Signup(this);
+//            this.gui_game = new GUI_Game(questions, socket, TIME_PLAY, user)
         } catch (IOException ex) {
-            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("The server is not start");
         }
 
     }

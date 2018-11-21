@@ -44,9 +44,11 @@ public class GUI_Home extends javax.swing.JFrame {
     public void showRank(ArrayList<User> users) {
         DefaultTableModel dtm;
         dtm = (DefaultTableModel) this.tblRank.getModel();
+        dtm.setRowCount(0);
         for (int i = 0; i < 10; i++) {
-            dtm.addRow(new Object[]{i + 1 + "", users.get(i).getNickname(), users.get(i).getScore()});
+            dtm.addRow(new Object[]{i + 1 + "", users.get(i).getNickname(), users.get(i).getScore(), users.get(i).getTime()});
         }
+        this.tblRank.setModel(dtm);
     }
 
     /**
@@ -65,11 +67,11 @@ public class GUI_Home extends javax.swing.JFrame {
         cbStatus = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         cbSort = new javax.swing.JComboBox<>();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tblRank = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         onlineList = new javax.swing.JList<>();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblRank = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(102, 153, 255));
@@ -105,33 +107,12 @@ public class GUI_Home extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Top 10");
 
-        cbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "score", "time" }));
-
-        tblRank.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Num", "Nick Name", "Score"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+        cbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "scores", "time" }));
+        cbSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbSortActionPerformed(evt);
             }
         });
-        tblRank.setMinimumSize(new java.awt.Dimension(10, 10));
-        jScrollPane3.setViewportView(tblRank);
 
         jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -143,6 +124,31 @@ public class GUI_Home extends javax.swing.JFrame {
         jScrollPane1.setViewportView(onlineList);
 
         jScrollPane2.setViewportView(jScrollPane1);
+
+        tblRank.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Num", "Nick Name", "Scores", "Time"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(tblRank);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -162,8 +168,8 @@ public class GUI_Home extends javax.swing.JFrame {
                         .addGap(104, 104, 104)
                         .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(22, 22, 22)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -191,28 +197,25 @@ public class GUI_Home extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(updateOnlineList)
-                            .addComponent(cbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(32, 32, 32))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(71, 71, 71))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(updateOnlineList)
+                    .addComponent(cbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateOnlineListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateOnlineListActionPerformed
-        ObjectOutputStream oos = null;
         try {
             // TODO add your handling code here:
-            oos = new ObjectOutputStream(this.game_client.socket.getOutputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(this.game_client.socket.getOutputStream());
             oos.writeObject(new Message("loadOnline"));
             oos.flush();
         } catch (IOException ex) {
@@ -257,6 +260,17 @@ public class GUI_Home extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cbStatusActionPerformed
 
+    private void cbSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSortActionPerformed
+        try {
+            // TODO add your handling code here:
+            ObjectOutputStream oos = new ObjectOutputStream(this.game_client.socket.getOutputStream());
+            oos.writeObject(new Message("rank", cbSort.getSelectedItem() + ""));
+            oos.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(GUI_Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_cbSortActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cbSort;
@@ -266,10 +280,10 @@ public class GUI_Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     public javax.swing.JLabel nickName;
     public static javax.swing.JList<User> onlineList;
-    private javax.swing.JTable tblRank;
+    public javax.swing.JTable tblRank;
     private javax.swing.JButton updateOnlineList;
     // End of variables declaration//GEN-END:variables
 }

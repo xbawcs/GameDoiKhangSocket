@@ -52,7 +52,7 @@ public class ReceivingThread implements Runnable {
                         break;
                     case "loadOnline":
                         this.game_client.onlineList = response.getList();
-                        System.out.println(response.getList().size() + "---" + response.getText());
+                        System.out.println("số người chơi " + response.getText() + "---" + response.getList().size());
                         this.showOnlineList(response.getList());
                         break;
                     case "rank":
@@ -104,10 +104,11 @@ public class ReceivingThread implements Runnable {
         }
         GUI_Home.onlineList.setModel(model);
         GUI_Home.onlineList.setCellRenderer(new ItemModel());
-        System.out.println("okeee");
     }
     
     public void challenge(User user) throws IOException {
+        this.game_client.gui_game.setVisible(false);
+        this.game_client.gui_gameover.setVisible(false);
         int comfirm = JOptionPane.showConfirmDialog(null, user.getNickname().toUpperCase() + " wants to challenge you.\n Do you agree?");
         oos = new ObjectOutputStream(this.game_client.socket.getOutputStream());
         if (comfirm == 0) {
