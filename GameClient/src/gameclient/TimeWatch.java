@@ -8,6 +8,7 @@ package gameclient;
 import Interface.Constant;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import view.GUI_Game;
 import view.GUI_GameOver;
 import view.GUI_Home;
@@ -50,6 +51,10 @@ public class TimeWatch implements Runnable {
             } catch (InterruptedException ex) {
                 Logger.getLogger(TimeWatch.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+        if(time == 0) {
+            this.gui_game.endGame();
+            JOptionPane.showMessageDialog(null, "Time over!!!!!");
         }
     }
 }

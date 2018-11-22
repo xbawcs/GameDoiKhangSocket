@@ -144,7 +144,7 @@ public class Request {
             user.setPassword(result.getString("password"));
             user.setNumOfmatches(result.getInt("matches"));
             user.setWin(result.getInt("win"));
-            user.setScore(result.getInt("scores"));
+            user.setScore(result.getDouble("scores"));
             user.setTime(result.getInt("time"));
             user.setStatus(1);
 

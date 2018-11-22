@@ -343,6 +343,10 @@ public class GUI_Game extends javax.swing.JFrame {
     }//GEN-LAST:event_ans4ActionPerformed
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        endGame();
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
+    public void endGame() {
         try {
             // TODO add your handling code here:
             this.btnSubmit.setEnabled(false);
@@ -354,8 +358,7 @@ public class GUI_Game extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(GUI_Game.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btnSubmitActionPerformed
-
+    }
     private void btnQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitActionPerformed
         // TODO add your handling code here:
         this.dispose();
